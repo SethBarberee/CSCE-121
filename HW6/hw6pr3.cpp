@@ -12,6 +12,7 @@
 class Regular_hexagon : public Shape {
     public:
     Regular_hexagon(Point p1, int side){
+        // Using side length, draw the hexagon
         add(p1); 
         add(Point(p1.x - side, p1.y + side));
         add(Point(p1.x, p1.y + (2 * side)));
@@ -27,15 +28,17 @@ try{
   int start_location = 150;
   // 600 x 400 window named Hexagon Tiled
   Simple_window win1(Point(100,200),600,400,"Hexagon Tiled");
+
   Regular_hexagon hex1(Point(start_location,start_location),side_length); // Starting hexagon
   Regular_hexagon hex2(Point(start_location + 3*side_length, start_location), side_length); // Hexagon to the right of the start
-
   Regular_hexagon hex3(Point(start_location, start_location + 2 * side_length), side_length); // Hexagon above the start
   Regular_hexagon hex4(Point(start_location, start_location - 2 * side_length), side_length); // Hexagon below the start
   Regular_hexagon hex5(Point(start_location - 3*side_length, start_location), side_length); // Hexagon to the left of the start
   Regular_hexagon hex6(Point(start_location + 6*side_length, start_location), side_length); // 2nd Hexagon to the right of the start
   Regular_hexagon hex7(Point(start_location + 3*side_length, start_location - 2 * side_length), side_length); // Hexagon to the right down
   Regular_hexagon hex8(Point(start_location + 3*side_length, start_location + 2 * side_length), side_length); // Hexagon to the right up
+
+  // Attach them all to the screen
   win1.attach(hex1);
   win1.attach(hex2);
   win1.attach(hex3);

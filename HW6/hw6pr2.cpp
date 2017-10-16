@@ -39,7 +39,7 @@ Regular_polygon :: Regular_polygon(double num, double radius, Point cen) : side_
        if (i != 360)
         current_angle = deg2rad(i);
        else
-        current_angle = 0;
+        current_angle = 0; // At 360 degrees, it's just easier to plot it as 0 degrees
        add(Point(cen.x + (radius * cos(current_angle)), cen.y - (-radius * sin(current_angle)))); // Add the point in polar coordinates 
     }
 }
@@ -47,22 +47,36 @@ Regular_polygon :: Regular_polygon(double num, double radius, Point cen) : side_
 int main()
 try {
   double r3,r4,r5,r6,r7;
-  double r = 200;
-  int centerx = 300;
-  int centery = 300;
+  double r = 200; // Radius of the octogon
+  int centerx = 300; // X-coordinate of the center of the shapes
+  int centery = 300; // Y-coordinate of the center of the shapes
   Point center = Point(centerx,centery);
   Simple_window win1(Point(0,0),1000,1000,"Enclosed Polygons");
+
+  // Scale Triangle to be inside of the square
   r3 = (r * 3)/8;
   Regular_polygon triangle(3,r3, center);
+
+  // Scale Square to be inside of the pentagon
   r4 = (r * 4)/8;
   Regular_polygon quad(4, r4, center);
+
+  // Scale Pentagon to be inside of the hexagon
   r5 = (r * 5)/8;
   Regular_polygon pentagon(5, r5, center);
+
+  // Scale Hexagon to be inside of the septagon
   r6 = (r * 6)/8;
   Regular_polygon hexagon(6, r6, center);
+
+  // Scale Septagon to be inside of the octagon
   r7 = (r * 7)/8;
   Regular_polygon septagon(7, r7, center);
+
+  // No scale needed since it is the base shape
   Regular_polygon octagon(8, r, center);
+
+  // Attach them all to the screen
   win1.attach(triangle);
   win1.attach(quad);
   win1.attach(pentagon);
