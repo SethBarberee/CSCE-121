@@ -3,60 +3,83 @@ class Place {
     string name;
     string address;
     string category;
-
-    public:
-    void set_category(string cat) {category = cat;}
 }
 
-class school : public Place{
+class School : public Place{
     private:
     int grade_level;
 }
 
-class park : public Place {
+School :: School(string nam, string addr, tring cat, int grade) : name(nam), address(addr), category(cat), grade_level(grade){}
+
+class Park : public Place {
     private:
     int hours_open;
     bool has_pool;
 }
 
-class hospital : public Place {
+Park :: Park(string nam, string addr, string cat, int hours, bool pool) : name(nam), address(addr), category(cat), hours_open(hours), has_pool(pool){}
+
+class Hospital : public Place {
     private:
     int num_doctors;
 }
 
-class retail_shop : public Place {
+Hospital :: Hospital(string nam, string addr, string cat, int docs) : name(nam), address(addr), category(cat), num_doctors(doc){}
+
+class Retail_shop : public Place {
     private:
     string items;
 }
 
-class mall : public Place {
+Retail_shop :: Retail_shop(string nam, string addr, string cat, string item) : name(nam), address(addr), category(cat), items(item){}
+
+class Mall : public Place {
     private:
     int num_shops;
 }
 
-class stadium : public Place {
+Mall :: Mall(string nam, string addr, string cat, int nums) : name(nam), address(addr), category(cat), num_shops(nums){}
+
+class Stadium : public Place {
     private:
     string team;
     bool has_roof;
+    
+    public:
+    void set_roof(bool roof){has_roof = roof;}
 }
 
-class restaraunt : public Place {
+Stadium :: Stadium(string nam, string addr, string cat, string tem, bool roof) : name(nam), address(addr), category(cat), team(tem), has_roof(roof){}
+
+class Restaraunt : public Place {
     private:
     string food_style;
 }
 
-class insurance : public Place {
+Restaraunt :: Restaraunt(string nam, string addr, string cat, string style) : name(nam), address(addr), category(cat), food_style(style){}
+
+class Insurance : public Place {
     private:
     string insurance_style;
 }
 
-class arena : public stadium {
+Insurance :: Insurance(string nam, string addr, string cat, string style) : name(nam), address(addr), category(cat), style(insurance_style){}
+
+class Arena : public Stadium {
     private:
     string arena_type;
-    stadium :: stadium.has_roof = true;
 }
 
-class field : public statidum {
+Arena :: Arena(string nam, string addr, string cat, string type) : name(nam), address(addr), category(cat), arena_type(type){
+    Stadium :: Stadium.set_roof(true);
+}
+
+class Field : public Stadium {
     private:
-    stadium :: stadium.has_roof = false;
+    string field_type;
+}
+
+Field :: Field(string nam, string addr, string cat, string type) : name(nam), address(addr), category(cat), field_type(type){
+    Stadium :: Stadium.set_roof(false);
 }
