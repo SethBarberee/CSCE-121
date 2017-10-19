@@ -108,6 +108,12 @@ class Hospital : public Place {
 
 Hospital :: Hospital(string nam, string addr, string cat, int docs) : Place(nam, addr, cat), num_doctors(docs){}
 
+ostream& operator<<(ostream& out, Hospital& a){
+    cout << (Place&)a << endl;
+    out << "Number of Doctors: " << a.get_num_doctors() << endl;
+    return out;
+}
+
 class Clinic : public Hospital {
     private:
     string surgeries;
@@ -118,6 +124,12 @@ class Clinic : public Hospital {
 };
 
 Clinic :: Clinic(string nam, string addr, string cat, int docs, string sur) : Hospital(nam, addr, cat, docs), surgeries(sur){}
+
+ostream& operator<<(ostream& out, Clinic& a){
+    cout << (Hospital&)a << endl;
+    out << "Surgeries: " << a.get_surgeries() << endl;
+    return out;
+}
 
 class Stadium : public Place {
     private:
@@ -135,6 +147,12 @@ class Stadium : public Place {
 Stadium :: Stadium(string nam, string addr, string cat, string tem, bool roof) : Place(nam, addr, cat), team(tem), has_roof(roof){}
 Stadium :: Stadium(string nam, string addr, string cat, string tem) : Place(nam,addr,cat), team(tem){} // Pass this constructor to Place class
 
+ostream& operator<<(ostream& out, Stadium& a){
+    cout << (Place&)a << endl;
+    out << "Team Name: " << a.get_team() << endl << "Has Roof: " << a.get_has_roof() << endl;
+    return out;
+}
+
 class Arena : public Stadium {
     private:
     string arena_type;
@@ -146,6 +164,12 @@ class Arena : public Stadium {
 
 Arena :: Arena(string nam, string addr, string cat, string tem, string type) : Stadium(nam, addr, cat, tem), arena_type(type){
     set_roof(true);
+}
+
+ostream& operator<<(ostream& out, Arena& a){
+    cout << (Stadium&)a << endl;
+    out << "Arena Type: " << a.get_arena_type() << endl;
+    return out;
 }
 
 class Field : public Stadium {
@@ -161,18 +185,31 @@ Field :: Field(string nam, string addr, string cat, string tem, string type) : S
     set_roof(false);
 }
 
+ostream& operator<<(ostream& out, Arena& a){
+    cout << (Stadium&)a << endl;
+    out << "Field Type: " << a.get_field_type() << endl;
+    return out;
+}
+
 class Services : public Place {
     private:
     int price;
 
     public:
     void set_price(int service_price){price = service_price;}
+    int get_price(){return price;}
     Services(string name, string address, string category, int price);
     Services(string name, string address, string category);
 };
 
 Services :: Services(string nam, string addr, string cat, int service_price) : Place(nam, addr, cat), price(service_price){}
 Services :: Services(string nam, string addr, string cat) : Place(nam, addr, cat){}
+
+ostream& operator<<(ostream& out, Services& a){
+    cout << (Place&)a << endl;
+    out << "Price: " << a.get_price() << endl;
+    return out;
+}
 
 class Trash : public Services {
     private:
@@ -185,6 +222,31 @@ class Trash : public Services {
 
 Trash :: Trash(string nam, string addr, string cat, bool incenerator) : Services(nam, addr, cat), has_incenerator(incenerator){
     set_price(10);
+}
+
+ostream& operator<<(ostream& out, Trash& a){
+    cout << (Services&)a << endl;
+    out << "Has Incenerator: " << a.get_has_incenerator() << endl;
+    return out;
+}
+
+class Recycling : public Services{
+    private:
+    string recyclable;
+    
+    public:
+    string get_recyclable(){return recylable;}
+    Recycling(string name, string address, string category, string recyclable);
+};
+
+Recycling :: Recycling(string nam, string addr, string cat, string recycle) : Services(nam, addr, cat), recyclable(recycle){
+    set_price(20);
+}
+
+ostream& operator<<(ostream& out, Recycling& a){
+    cout << (Services&)a << endl;
+    out << "Recyclables: " << a.get_recyclable() << endl;
+    return out;
 }
 
 class Water : public Services {
@@ -200,6 +262,12 @@ Water :: Water(string nam, string addr, string cat, bool purifier) : Services(na
     set_price(20);
 }
 
+ostream& operator<<(ostream& out, Water& a){
+    cout << (Services&)a << endl;
+    out << "Has Purifier: " << a.get_has_purifier() << endl;
+    return out;
+}
+
 class Post_Office : public Services {
     private:
     long zip_code;
@@ -211,6 +279,12 @@ class Post_Office : public Services {
 
 Post_Office :: Post_Office(string nam, string addr, string cat, long zip) : Services(nam, addr, cat), zip_code(zip){
     set_price(1);
+}
+
+ostream& operator<<(ostream& out, Post_Office& a){
+    cout << (Services&)a << endl;
+    out << "Zip Code: " << a.get_zip_code() << endl;
+    return out;
 }
 
 int main(){
