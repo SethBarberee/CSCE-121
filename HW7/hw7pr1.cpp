@@ -15,6 +15,11 @@ class Place {
 
 Place :: Place(string nam, string addr, string cat) : name(nam), address(addr), category(cat){}
 
+ostream& operator<< (ostream& out, Place& a){
+    out << "Name: " << a.get_name() << endl << "Address: " << a.get_address() << endl << "Category: " << a.get_category() << endl;
+    return out;
+}
+
 class School : public Place{
     private:
     int grade_level;
@@ -29,33 +34,51 @@ class School : public Place{
 School :: School(string nam, string addr, string cat, int grade) : Place(nam, addr, cat),  grade_level(grade){}
 School :: School(string nam, string addr, string cat) : Place(nam, addr, cat){}
 
-class High_School : public Place{
+ostream& operator<< (ostream& out, School& a){
+    cout << (Place&)a << endl;
+    out << "Grade Level: " << a.get_grade_level() << endl;
+    return out;
+}
+
+class High_School : public School{
     private:
     string certification;
 
     public:
     string get_certification(){return certification;}
-    High_School(string name, string address, string category, certification);
+    High_School(string name, string address, string category, string certification);
 };
 
 High_School :: High_School(string nam, string addr, string cat, string cert) : School(nam, addr, cat), certification(cert){
     set_grade_level(12);
 }
 
-class College : public Place{
+ostream& operator<< (ostream& out, High_School& a){
+    cout << (School&)a << endl;
+    out << "Certification: " << a.get_certification() << endl;
+    return out;
+}
+
+class College : public School{
     private:
     string degrees;
 
     public:
     string get_degrees(){return degrees;}
     College(string name, string address, string category, string degrees);
-}
+};
 
 College :: College(string nam, string addr, string cat, string degree) : School(nam, addr, cat), degrees(degree){
     set_grade_level(16);
 }
 
-class Elementary_School : public Place{
+ostream& operator<< (ostream& out, College& a){
+    cout << (School&)a << endl;
+    out << "Degrees: " << a.get_degrees() << endl;
+    return out;
+}
+
+class Elementary_School : public School{
     private:
     bool has_recess;
 
@@ -66,6 +89,12 @@ class Elementary_School : public Place{
 
 Elementary_School :: Elementary_School(string nam, string addr, string cat, bool recess) : School(nam, addr, cat), has_recess(recess){
     set_grade_level(4);
+}
+
+ostream& operator<< (ostream& out, Elementary_School& a){
+    cout << (Elementary_School&)a << endl;
+    out << "Has Recess: " << a.get_has_recess() << endl;
+    return out;
 }
 
 class Hospital : public Place {
@@ -100,11 +129,11 @@ class Stadium : public Place {
     bool get_has_roof(){return has_roof;}
     string get_team(){return team;}
     Stadium(string name, string address, string category, string team, bool has_roof);
-    Stadium(string name, string address, string category); // Lets child classes use the Place constructor
+    Stadium(string name, string address, string category, string team); // Lets child classes use the Place constructor
 };
 
 Stadium :: Stadium(string nam, string addr, string cat, string tem, bool roof) : Place(nam, addr, cat), team(tem), has_roof(roof){}
-Stadium :: Stadium(string nam, string addr, string cat) : Place(nam,addr,cat){} // Pass this constructor to Place class
+Stadium :: Stadium(string nam, string addr, string cat, string tem) : Place(nam,addr,cat), team(tem){} // Pass this constructor to Place class
 
 class Arena : public Stadium {
     private:
@@ -112,10 +141,10 @@ class Arena : public Stadium {
 
     public:
     string get_arena_type(){return arena_type;}
-    Arena(string name, string address, string category, string arena_type);
+    Arena(string name, string address, string category, string team, string arena_type);
 };
 
-Arena :: Arena(string nam, string addr, string cat, string type) : Stadium(nam, addr, cat), arena_type(type){
+Arena :: Arena(string nam, string addr, string cat, string tem, string type) : Stadium(nam, addr, cat, tem), arena_type(type){
     set_roof(true);
 }
 
@@ -125,10 +154,10 @@ class Field : public Stadium {
 
     public:
     string get_field_type(){return field_type;}
-    Field(string name, string address, string category, string field_type);
+    Field(string name, string address, string category, string team, string field_type);
 };
 
-Field :: Field(string nam, string addr, string cat, string type) : Stadium(nam, addr, cat), field_type(type){
+Field :: Field(string nam, string addr, string cat, string tem, string type) : Stadium(nam, addr, cat, tem), field_type(type){
     set_roof(false);
 }
 
@@ -142,8 +171,8 @@ class Services : public Place {
     Services(string name, string address, string category);
 };
 
-    Services(string nam, string addr, string cat, int service_price) : Place(nam, addr, cat), price(service_price){};
-    Services(string nam, string addr, string cat) : Place(nam, addr, cat){};
+Services :: Services(string nam, string addr, string cat, int service_price) : Place(nam, addr, cat), price(service_price){}
+Services :: Services(string nam, string addr, string cat) : Place(nam, addr, cat){}
 
 class Trash : public Services {
     private:
@@ -156,7 +185,7 @@ class Trash : public Services {
 
 Trash :: Trash(string nam, string addr, string cat, bool incenerator) : Services(nam, addr, cat), has_incenerator(incenerator){
     set_price(10);
-};
+}
 
 class Water : public Services {
     private:
@@ -164,7 +193,12 @@ class Water : public Services {
 
     public:
     bool get_has_purifier(){return has_purifier;}
+    Water(string name, string address, string category, bool has_purifier);
 };
+
+Water :: Water(string nam, string addr, string cat, bool purifier) : Services(nam, addr, cat), has_purifier(purifier){
+    set_price(20);
+}
 
 class Post_Office : public Services {
     private:
@@ -172,7 +206,12 @@ class Post_Office : public Services {
 
     public:
     long get_zip_code(){return zip_code;}
+    Post_Office(string name, string address, string category, long zip_code);
 };
+
+Post_Office :: Post_Office(string nam, string addr, string cat, long zip) : Services(nam, addr, cat), zip_code(zip){
+    set_price(1);
+}
 
 int main(){
     return 0;
