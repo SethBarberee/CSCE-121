@@ -185,7 +185,7 @@ Field :: Field(string nam, string addr, string cat, string tem, string type) : S
     set_roof(false);
 }
 
-ostream& operator<<(ostream& out, Arena& a){
+ostream& operator<<(ostream& out, Field& a){
     cout << (Stadium&)a << endl;
     out << "Field Type: " << a.get_field_type() << endl;
     return out;
@@ -235,7 +235,7 @@ class Recycling : public Services{
     string recyclable;
     
     public:
-    string get_recyclable(){return recylable;}
+    string get_recyclable(){return recyclable;}
     Recycling(string name, string address, string category, string recyclable);
 };
 
