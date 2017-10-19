@@ -55,18 +55,18 @@ College :: College(string nam, string addr, string cat, string degree) : School(
     set_grade_level(16);
 }
 
-class Park : public Place {
+class Elementary_School : public Place{
     private:
-    int hours_open;
-    bool has_pool;
+    bool has_recess;
 
     public:
-    int get_hours_open(){return hours_open;}
-    bool get_has_pool(){return has_pool;}
-    Park(string name, string address, string category, int hours_open, bool has_pool);
+    bool get_has_recess(){return has_recess;}
+    Elementary_School(string name, string address, string category, bool has_recess);
 };
 
-Park :: Park(string nam, string addr, string cat, int hours, bool pool) : Place(nam, addr, cat), hours_open(hours), has_pool(pool){}
+Elementary_School :: Elementary_School(string nam, string addr, string cat, bool recess) : School(nam, addr, cat), has_recess(recess){
+    set_grade_level(4);
+}
 
 class Hospital : public Place {
     private:
@@ -131,6 +131,48 @@ class Field : public Stadium {
 Field :: Field(string nam, string addr, string cat, string type) : Stadium(nam, addr, cat), field_type(type){
     set_roof(false);
 }
+
+class Services : public Place {
+    private:
+    int price;
+
+    public:
+    void set_price(int service_price){price = service_price;}
+    Services(string name, string address, string category, int price);
+    Services(string name, string address, string category);
+};
+
+    Services(string nam, string addr, string cat, int service_price) : Place(nam, addr, cat), price(service_price){};
+    Services(string nam, string addr, string cat) : Place(nam, addr, cat){};
+
+class Trash : public Services {
+    private:
+    bool has_incenerator;
+
+    public:
+    bool get_has_incenerator(){return has_incenerator;}
+    Trash(string name, string address, string category, bool has_incenerator);
+};
+
+Trash :: Trash(string nam, string addr, string cat, bool incenerator) : Services(nam, addr, cat), has_incenerator(incenerator){
+    set_price(10);
+};
+
+class Water : public Services {
+    private:
+    bool has_purifier;
+
+    public:
+    bool get_has_purifier(){return has_purifier;}
+};
+
+class Post_Office : public Services {
+    private:
+    long zip_code;
+
+    public:
+    long get_zip_code(){return zip_code;}
+};
 
 int main(){
     return 0;
