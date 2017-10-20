@@ -1,5 +1,7 @@
 #include "std_lib_facilities_4.h"
 
+class Bad_File_Name{}; // used for throwing an error for wrong file names
+
 class Place {
     private:
     string name;
@@ -21,7 +23,7 @@ ostream& operator<< (ostream& out, Place& a){
 }
 
 class School : public Place{
-    private:
+    protected:
     int grade_level;
 
     public:
@@ -33,7 +35,7 @@ class School : public Place{
 School :: School(string nam, string addr, string cat) : Place(nam, addr, cat){}
 
 ostream& operator<< (ostream& out, School& a){
-    cout << (Place&)a << endl;
+    cout << (Place&)a;
     out << "Grade Level: " << a.get_grade_level() << endl;
     return out;
 }
@@ -51,8 +53,8 @@ High_School :: High_School(string nam, string addr, string cat, string cert) : S
     set_grade_level(12);
 }
 
-ostream& operator<< (ostream& out, High_School& a){
-    cout << (School&)a << endl;
+ostream& operator<<(ostream& out, High_School& a){
+    cout << (School&)a;
     out << "Certification: " << a.get_certification() << endl;
     return out;
 }
@@ -78,8 +80,8 @@ College :: College(string nam, string addr, string cat, string degree) : School(
     set_grade_level(16);
 }
 
-ostream& operator<< (ostream& out, College& a){
-    cout << (School&)a << endl;
+ostream& operator<<(ostream& out, College& a){
+    cout << (School&)a;
     out << "Degrees: " << a.get_degrees() << endl;
     return out;
 }
@@ -97,7 +99,14 @@ class Elementary_School : public School{
     bool has_recess;
 
     public:
-    bool get_has_recess(){return has_recess;}
+    string get_has_recess(){
+        if(has_recess == 1){
+            return "Yes";
+        }
+        else{
+            return "No";
+        }
+    }
     Elementary_School(string name, string address, string category, bool has_recess);
 };
 
@@ -106,7 +115,7 @@ Elementary_School :: Elementary_School(string nam, string addr, string cat, bool
 }
 
 ostream& operator<<(ostream& out, Elementary_School& a){
-    cout << (Elementary_School&)a << endl;
+    cout << (School&)a;
     out << "Has Recess: " << a.get_has_recess() << endl;
     return out;
 }
@@ -121,7 +130,7 @@ istream& operator>>(istream& is, Elementary_School& a){
 }
 
 class Hospital : public Place {
-    private:
+    protected:
     int num_doctors;
 
     public:
@@ -132,7 +141,7 @@ class Hospital : public Place {
 Hospital :: Hospital(string nam, string addr, string cat, int docs) : Place(nam, addr, cat), num_doctors(docs){}
 
 ostream& operator<<(ostream& out, Hospital& a){
-    cout << (Place&)a << endl;
+    cout << (Place&)a;
     out << "Number of Doctors: " << a.get_num_doctors() << endl;
     return out;
 }
@@ -149,7 +158,7 @@ class Clinic : public Hospital {
 Clinic :: Clinic(string nam, string addr, string cat, int docs, string sur) : Hospital(nam, addr, cat, docs), surgeries(sur){}
 
 ostream& operator<<(ostream& out, Clinic& a){
-    cout << (Hospital&)a << endl;
+    cout << (Hospital&)a;
     out << "Surgeries: " << a.get_surgeries() << endl;
     return out;
 }
@@ -164,13 +173,20 @@ istream& operator>>(istream& is, Clinic& a){
 }
 
 class Stadium : public Place {
-    private:
+    protected:
     string team;
     bool has_roof;
     
     public:
     void set_roof(bool roof){has_roof = roof;}
-    bool get_has_roof(){return has_roof;}
+    string get_has_roof(){
+        if(has_roof = 1){
+            return "Yes";
+        }
+        else{
+            return "No";
+        }
+    }
     string get_team(){return team;}
     Stadium(string name, string address, string category, string team); // Lets child classes use the Place constructor
 };
@@ -178,7 +194,7 @@ class Stadium : public Place {
 Stadium :: Stadium(string nam, string addr, string cat, string tem) : Place(nam,addr,cat), team(tem){} // Pass this constructor to Place class
 
 ostream& operator<<(ostream& out, Stadium& a){
-    cout << (Place&)a << endl;
+    cout << (Place&)a;
     out << "Team Name: " << a.get_team() << endl << "Has Roof: " << a.get_has_roof() << endl;
     return out;
 }
@@ -197,7 +213,7 @@ Arena :: Arena(string nam, string addr, string cat, string tem, string type) : S
 }
 
 ostream& operator<<(ostream& out, Arena& a){
-    cout << (Stadium&)a << endl;
+    cout << (Stadium&)a;
     out << "Arena Type: " << a.get_arena_type() << endl;
     return out;
 }
@@ -224,7 +240,7 @@ Field :: Field(string nam, string addr, string cat, string tem, string type) : S
 }
 
 ostream& operator<<(ostream& out, Field& a){
-    cout << (Stadium&)a << endl;
+    cout << (Stadium&)a;
     out << "Field Type: " << a.get_field_type() << endl;
     return out;
 }
@@ -238,7 +254,7 @@ istream& operator>>(istream& is, Field& a){
 }
 
 class Services : public Place {
-    private:
+    protected:
     int price;
 
     public:
@@ -250,7 +266,7 @@ class Services : public Place {
 Services :: Services(string nam, string addr, string cat) : Place(nam, addr, cat){}
 
 ostream& operator<<(ostream& out, Services& a){
-    cout << (Place&)a << endl;
+    cout << (Place&)a;
     out << "Price: " << a.get_price() << endl;
     return out;
 }
@@ -260,7 +276,14 @@ class Trash : public Services {
     bool has_incenerator;
 
     public:
-    bool get_has_incenerator(){return has_incenerator;}
+    string get_has_incenerator(){
+        if (has_incenerator == 1){
+            return "Yes";
+        }
+        else {
+            return "No";
+        }
+    }
     Trash(string name, string address, string category, bool has_incenerator);
 };
 
@@ -269,7 +292,7 @@ Trash :: Trash(string nam, string addr, string cat, bool incenerator) : Services
 }
 
 ostream& operator<<(ostream& out, Trash& a){
-    cout << (Services&)a << endl;
+    cout << (Services&)a;
     out << "Has Incenerator: " << a.get_has_incenerator() << endl;
     return out;
 }
@@ -297,7 +320,7 @@ Recycling :: Recycling(string nam, string addr, string cat, string recycle) : Se
 }
 
 ostream& operator<<(ostream& out, Recycling& a){
-    cout << (Services&)a << endl;
+    cout << (Services&)a;
     out << "Recyclables: " << a.get_recyclable() << endl;
     return out;
 }
@@ -315,7 +338,14 @@ class Water : public Services {
     bool has_purifier;
 
     public:
-    bool get_has_purifier(){return has_purifier;}
+    string get_has_purifier(){
+        if (has_purifier == 1){
+            return "Yes";
+        }
+        else {
+            return "No";
+        }
+    }
     Water(string name, string address, string category, bool has_purifier);
 };
 
@@ -324,7 +354,7 @@ Water :: Water(string nam, string addr, string cat, bool purifier) : Services(na
 }
 
 ostream& operator<<(ostream& out, Water& a){
-    cout << (Services&)a << endl;
+    cout << (Services&)a;
     out << "Has Purifier: " << a.get_has_purifier() << endl;
     return out;
 }
@@ -352,7 +382,7 @@ Post_Office :: Post_Office(string nam, string addr, string cat, long zip) : Serv
 }
 
 ostream& operator<<(ostream& out, Post_Office& a){
-    cout << (Services&)a << endl;
+    cout << (Services&)a;
     out << "Zip Code: " << a.get_zip_code() << endl;
     return out;
 }
@@ -367,13 +397,44 @@ istream& operator>>(istream& is, Post_Office& a){
 }
 
 // Import the given file name and add the data in it to the respective vectors in the database
-void import_file(string input_file, vector<High_School> &a, vector<College> &b, vector<Arena> &c, vector<Field> &d, vector<Clinic> &e, vector<Trash> &f, vector<Post_Office> &g, vector<Water> &h){
+void import_file(string input_file){
     ifstream ist {input_file};
+    High_School a = High_School("","","","");
+    College b = College("", "", "", "");
+    Elementary_School c = Elementary_School("", "", "", false);
+    Clinic d = Clinic("", "", "", 0 , "");
+    Arena e = Arena("", "", "", "", "");
+    Field f = Field("", "", "", "", "");
+    Trash g = Trash("", "", "", false);
+    Recycling h = Recycling("", "", "", "");
+    Water i = Water("", "", "", false);
+    Post_Office j = Post_Office("", "", "", 0.000);
 
-    if(!ist) error("Can't open input file: ", input_file);
+    if(!ist) throw Bad_File_Name();
 
+    ist >> a; // import High School
+    ist >> b; // import College
+    ist >> c; // import Elementary_School
+    ist >> d; // import Clinic
+    ist >> e; // import Arena
+    ist >> f; // import Field
+    ist >> g; // import Trash
+    ist >> h; // import Recycling
+    ist >> i; // import Water
+    ist >> j; // import Post_Office
+
+    cout << a << endl << b << endl << c << endl << d << endl << e << endl << f << endl << g << endl << h << endl << i << endl << j << endl;
 }
 
 int main(){
-    return 0;
+    try {
+        string file_name;
+        cout << "What is the name of the output file?\n";
+        cout << "Output file: ";
+        cin >> file_name;
+        import_file(file_name);
+        }
+    catch(Bad_File_Name){
+        cerr << "File not found!\n";
+    }
 }

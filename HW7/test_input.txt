@@ -1,0 +1,10 @@
+Stephenville_High_School Overhill_Dr High_School Recommended
+TAMU Bizzell_Dr College Engineering
+Gilbert_Elementary Frey_St Elementary_School 1
+Beutel_Clinic Jones_St Clinic 2 Flu
+Reed_Arena Somewhere_Ct Arena TAMU_Basketball Hardwood
+Ellis_Field George_Bush_Dr Field TAMU_Womens Turf
+TAMU_Trash_Plant Somewhere_Dr Trash 0
+TAMU_Recycling_Plant Bizzell_Dr Recycling Plastic
+TAMU_Water_Plant New_St Water 1
+Northgate_Post_Office University_Dr Post_Office 77840
