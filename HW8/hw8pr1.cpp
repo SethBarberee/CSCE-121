@@ -29,56 +29,93 @@ private:
   In_box money_in;                   // the amount of money to convert
   Out_box money_out;                 // the converted money amount
   Button quit_button;                // end program
-  Menu currency_menu;                // menu of color choices for the lines
-  Button menu_button;                // button to display the color menu
+  Menu currency_menu1;               // menu of currencies to convert from
+  Menu currency_menu2;               // menu of currencies to convert to
+  Button menu1_button;               // button to display menu 1
+  Button menu2_button;               // button to display menu 2
 
   // function members
 
-  void hide_menu() {     
-    // hides the color menu and shows the button to display the color menu
-    currency_menu.hide(); 
-    menu_button.show(); 
+  void hide_menu1() {     
+    currency_menu1.hide(); 
+    menu1_button.show(); 
+  }
+
+  void hide_menu2() {
+    currency_menu2.hide();
+    menu2_button.show();
   }
 
   // actions invoked by callbacks:
 
-  void US_Dollar_pressed() {
-    hide_menu();        // once a color is chosen from the menu, hide the menu
+  void US_Dollar_pressed1() {
+    hide_menu1();        // once a color is chosen from the menu, hide the menu
   }
 
-  void EU_Euro_pressed() {
-    hide_menu();
+  void US_Dollar_pressed2() {
+    hide_menu2();
   }
 
-  void GB_Pound_pressed() {
-    hide_menu();
+  void EU_Euro_pressed1() {
+    hide_menu1();
   }
 
-  void IN_Rupee_pressed() {
-    hide_menu();
+  void EU_Euro_pressed2() {
+    hide_menu2();
   }
 
-  void AU_Dollar_pressed() {
-    hide_menu();
+  void GB_Pound_pressed1() {
+    hide_menu1();
   }
 
-  void menu_pressed() {
+  void GB_Pound_pressed2() {
+    hide_menu2();
+  }
+
+  void IN_Rupee_pressed1() {
+    hide_menu1();
+  }
+
+  void IN_Rupee_pressed2() {
+    hide_menu2();
+  }
+
+  void AU_Dollar_pressed1() {
+    hide_menu1();
+  }
+
+  void AU_Dollar_pressed2() {
+    hide_menu2();
+  }
+
+  void menu_pressed1() {
     // when menu button is pressed, hide the menu button and show the 
     // actual menu of colors
-    menu_button.hide();    
-    currency_menu.show();
+    menu1_button.hide();    
+    currency_menu1.show();
+  }
+
+  void menu_pressed2() {
+    menu2_button.hide();
+    currency_menu2.show();
   }
 
   void quit();   // defined below
 
-  // callback functions; declaUS_Dollar here and defined below.
+  // callback functions; declared here and defined below.
 
-  static void cb_US_Dollar(Address, Address);
-  static void cb_EU_Euro(Address, Address);
-  static void cb_GB_Pound(Address, Address);
-  static void cb_IN_Rupee(Address, Address);
-  static void cb_AU_Dollar(Address, Address);
-  static void cb_menu(Address, Address);
+  static void cb_US_Dollar1(Address, Address);
+  static void cb_US_Dollar2(Address, Address);
+  static void cb_EU_Euro1(Address, Address);
+  static void cb_EU_Euro2(Address, Address);
+  static void cb_GB_Pound1(Address, Address);
+  static void cb_GB_Pound2(Address, Address);
+  static void cb_IN_Rupee1(Address, Address);
+  static void cb_IN_Rupee2(Address, Address);
+  static void cb_AU_Dollar1(Address, Address);
+  static void cb_AU_Dollar2(Address, Address);
+  static void cb_menu1(Address, Address);
+  static void cb_menu2(Address, Address);
   static void cb_quit(Address, Address);
 };
 
@@ -100,17 +137,27 @@ Lines_window::Lines_window(Point xy, int w, int h, const string& title) :
 	      "Quit",                 // label of button
 	      cb_quit),               // callback function for button
   // initialize the currency menu
-  currency_menu(                        
-	     Point(x_max()-70,30),   // location of menu
-	     70, 20,                 // dimensions of menu
+  currency_menu1(
+         Point(x_max()-310, 20),
+         80, 20,
+         Menu::vertical,
+         "Currency to convert from"),
+  currency_menu2(                        
+	     Point(x_max()-80,30),   // location of menu
+	     80, 20,                 // dimensions of menu
 	     Menu::vertical,         // list menu items vertically
-	     "Currency"),               // label of menu 
+	     "Currency to convert to"),               // label of menu 
+  menu1_button(
+          Point(x_max()-310, 20),
+          80, 20,
+          "Currency to convert from",
+          cb_menu1),
   // initialize the menu button
-  menu_button(
+  menu2_button(
 	      Point(x_max()-80,30),  // location of menu button
 	      80, 20,                // dimensions of button 
-	      "Currency Menu",          // label of button
-	      cb_menu),               // callback for button
+	      "Currency to convert to", // label of button
+	      cb_menu2),               // callback for button
    // initialize the currency inbox
    money_in(
           Point(x_max()-310,0),
@@ -129,17 +176,27 @@ Lines_window::Lines_window(Point xy, int w, int h, const string& title) :
   attach(money_in);
   attach(money_out);
 
+  currency_menu1.attach(new Button(Point(0,0),0,0,"US_Dollar",cb_US_Dollar1)); 
+  currency_menu1.attach(new Button(Point(0,0),0,0,"EU_Euro",cb_EU_Euro1));
+  currency_menu1.attach(new Button(Point(0,0),0,0,"GB_Pound",cb_GB_Pound1));
+  currency_menu1.attach(new Button(Point(0,0),0,0,"IN_Rupee",cb_IN_Rupee1));
+  currency_menu1.attach(new Button(Point(0,0),0,0,"AU_Dollar",cb_AU_Dollar1));
+  attach(currency_menu1);
+  currency_menu1.hide(); 
+
+
   // attach currency to window
-  currency_menu.attach(new Button(Point(0,0),0,0,"US_Dollar",cb_US_Dollar)); 
-  currency_menu.attach(new Button(Point(0,0),0,0,"EU_Euro",cb_EU_Euro));
-  currency_menu.attach(new Button(Point(0,0),0,0,"GB_Pound",cb_GB_Pound));
-  currency_menu.attach(new Button(Point(0,0),0,0,"IN_Rupee",cb_IN_Rupee));
-  currency_menu.attach(new Button(Point(0,0),0,0,"AU_Dollar",cb_AU_Dollar));
-  attach(currency_menu);
-  currency_menu.hide(); 
+  currency_menu2.attach(new Button(Point(0,0),0,0,"US_Dollar",cb_US_Dollar2)); 
+  currency_menu2.attach(new Button(Point(0,0),0,0,"EU_Euro",cb_EU_Euro2));
+  currency_menu2.attach(new Button(Point(0,0),0,0,"GB_Pound",cb_GB_Pound2));
+  currency_menu2.attach(new Button(Point(0,0),0,0,"IN_Rupee",cb_IN_Rupee2));
+  currency_menu2.attach(new Button(Point(0,0),0,0,"AU_Dollar",cb_AU_Dollar2));
+  attach(currency_menu2);
+  currency_menu2.hide(); 
 
   // attach menu button
-  attach(menu_button);
+  attach(menu1_button);
+  attach(menu2_button);
 
 }
 
@@ -165,54 +222,67 @@ void Lines_window::quit() {
   hide();                   // FLTK idiom for delete window
 }
 
-// -------------------------------
-// callback for when US_Dollar button (part of color menu) is pressed - boilerplate
-
-void Lines_window::cb_US_Dollar(Address, Address pw) {
-  reference_to<Lines_window>(pw).US_Dollar_pressed();  
+void Lines_window::cb_US_Dollar1(Address, Address pw) {
+  reference_to<Lines_window>(pw).US_Dollar_pressed1();  
   // US_Dollar_pressed defined in Lines_window class as part of declaration
 }
 
-// -------------------------------
-// callback for when EU_Euro button (part of color menu) is pressed - boilerplate
+void Lines_window::cb_US_Dollar2(Address, Address pw) {
+  reference_to<Lines_window>(pw).US_Dollar_pressed2();  
+  // US_Dollar_pressed defined in Lines_window class as part of declaration
+}
 
-void Lines_window::cb_EU_Euro(Address, Address pw) {
-  reference_to<Lines_window>(pw).EU_Euro_pressed();  
+void Lines_window::cb_EU_Euro1(Address, Address pw) {
+  reference_to<Lines_window>(pw).EU_Euro_pressed1();  
   // EU_Euro_pressed defined in Lines_window class as part of declaration
 }
 
-// -------------------------------
-// callback for when GB_Pound button (part of color menu) is pressed - boilerplate
+void Lines_window::cb_EU_Euro2(Address, Address pw) {
+  reference_to<Lines_window>(pw).EU_Euro_pressed2();  
+  // EU_Euro_pressed defined in Lines_window class as part of declaration
+}
 
-void Lines_window::cb_GB_Pound(Address, Address pw) {
-  reference_to<Lines_window>(pw).GB_Pound_pressed();  
+void Lines_window::cb_GB_Pound1(Address, Address pw) {
+  reference_to<Lines_window>(pw).GB_Pound_pressed1();  
   // GB_Pound_pressed defined in Lines_window class as part of declaration
 }
 
-// -------------------------------
-// callback for when IN_Rupee button (part of color menu) is pressed - boilerplate
+void Lines_window::cb_GB_Pound2(Address, Address pw) {
+  reference_to<Lines_window>(pw).GB_Pound_pressed2();  
+  // GB_Pound_pressed defined in Lines_window class as part of declaration
+}
 
-void Lines_window::cb_IN_Rupee(Address, Address pw) {
-  reference_to<Lines_window>(pw).IN_Rupee_pressed();  
+void Lines_window::cb_IN_Rupee1(Address, Address pw) {
+  reference_to<Lines_window>(pw).IN_Rupee_pressed1();  
   // IN_Rupee_pressed defined in Lines_window class as part of declaration
 }
 
-// -------------------------------
-// callback for when AU_Dolar button (part of color menu) is pressed - boilerplate
+void Lines_window::cb_IN_Rupee2(Address, Address pw) {
+  reference_to<Lines_window>(pw).IN_Rupee_pressed2();  
+  // IN_Rupee_pressed defined in Lines_window class as part of declaration
+}
 
-void Lines_window::cb_AU_Dollar(Address, Address pw) {
-  reference_to<Lines_window>(pw).AU_Dollar_pressed();  
+void Lines_window::cb_AU_Dollar1(Address, Address pw) {
+  reference_to<Lines_window>(pw).AU_Dollar_pressed1();  
   // AU_Dollar_pressed defined in Lines_window class as part of declaration
 }
 
-// -------------------------------
-// callback for when menu button is pressed - boilerplate
+void Lines_window::cb_AU_Dollar2(Address, Address pw) {
+  reference_to<Lines_window>(pw).AU_Dollar_pressed2();  
+  // AU_Dollar_pressed defined in Lines_window class as part of declaration
+}
 
-void Lines_window::cb_menu(Address, Address pw)
+void Lines_window::cb_menu1(Address, Address pw)
 {  
-    reference_to<Lines_window>(pw).menu_pressed();
+    reference_to<Lines_window>(pw).menu_pressed1();
     // menu_pressed defined in Lines_window class as part of declaration
 } 
+
+void Lines_window::cb_menu2(Address, Address pw)
+{  
+    reference_to<Lines_window>(pw).menu_pressed2();
+    // menu_pressed defined in Lines_window class as part of declaration
+}
 
 // ---------------------------------------------------
 // main - just creates window and invokes gui_main
@@ -220,7 +290,7 @@ void Lines_window::cb_menu(Address, Address pw)
 int main() 
   try {
     // construct the GUI window
-    Lines_window win(Point(100,100),600,400,"lines");
+    Lines_window win(Point(100,100),600,400,"Currency Converter");
     return gui_main();  // inherited from Window; calls FLTK's run
   }
   catch(exception& e) {
