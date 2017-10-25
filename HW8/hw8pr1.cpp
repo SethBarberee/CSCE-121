@@ -14,7 +14,7 @@ using namespace std;
 
 //----------------------------------------------------------
 // define a struct that is a window in which lines can be
-// enteUS_Dollar via a GUI
+// entered via a GUI
 
 struct Lines_window : Graph_lib::Window {       // inherits from Window
 
@@ -26,8 +26,10 @@ struct Lines_window : Graph_lib::Window {       // inherits from Window
 
 private:
   // widgets:
+  In_box money_in;                   // the amount of money to convert
+  Out_box money_out;                 // the converted money amount
   Button quit_button;                // end program
-  Menu currency_menu;                   // menu of color choices for the lines
+  Menu currency_menu;                // menu of color choices for the lines
   Button menu_button;                // button to display the color menu
 
   // function members
@@ -97,7 +99,7 @@ Lines_window::Lines_window(Point xy, int w, int h, const string& title) :
 	      70, 20,                 // dimensions of button 
 	      "Quit",                 // label of button
 	      cb_quit),               // callback function for button
-  // initialize the color menu
+  // initialize the currency menu
   currency_menu(                        
 	     Point(x_max()-70,30),   // location of menu
 	     70, 20,                 // dimensions of menu
@@ -108,19 +110,26 @@ Lines_window::Lines_window(Point xy, int w, int h, const string& title) :
 	      Point(x_max()-80,30),  // location of menu button
 	      80, 20,                // dimensions of button 
 	      "Currency Menu",          // label of button
-	      cb_menu)               // callback for button
+	      cb_menu),               // callback for button
+   // initialize the currency inbox
+   money_in(
+          Point(x_max()-310,0),
+          100,20,
+          "Amount"),
+  //  initialize the currency output
+  money_out(
+          Point(100,0),
+          100, 20,
+          "Amount Converted")
 
   // body of constructor follows
 {
   // attach buttons and boxes to window
   attach(quit_button);
+  attach(money_in);
+  attach(money_out);
 
-  // First make 3 buttons for color menu, one for each color, and 
-  // attach them to the menu: the attach function of the Menu struct
-  // adjusts the size and location of the buttons; note callback functions).
-  // Then attach menu to window but hide it (initially, the menu button
-  // is displayed, not the actual menu of color choices).
-
+  // attach currency to window
   currency_menu.attach(new Button(Point(0,0),0,0,"US_Dollar",cb_US_Dollar)); 
   currency_menu.attach(new Button(Point(0,0),0,0,"EU_Euro",cb_EU_Euro));
   currency_menu.attach(new Button(Point(0,0),0,0,"GB_Pound",cb_GB_Pound));
