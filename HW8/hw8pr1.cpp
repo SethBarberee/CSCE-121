@@ -12,6 +12,16 @@
 using namespace Graph_lib;
 using namespace std;
 
+int currency_1 = 0; // row in currency table
+int currency_2 = 0; // column in currency table
+vector<vector<double>> currency_table = {
+        {0,0,0,0,0},
+        {0,0,0,0,0},
+        {0,0,0,0,0},
+        {0,0,0,0,0},
+        {0,0,0,0,0}
+};
+
 //----------------------------------------------------------
 // define a struct that is a window in which lines can be
 // entered via a GUI
@@ -20,9 +30,9 @@ struct Lines_window : Graph_lib::Window {       // inherits from Window
 
   // constructor
   Lines_window(Point xy,             // top lefthand corner
-	       int w,                // width
-	       int h,                // height
-	       const string& title); // label
+        int w,                // width
+	    int h,                // height
+	    const string& title); // label
 
 private:
   // widgets:
@@ -37,9 +47,9 @@ private:
 
   // function members
 
-  void hide_menu1() {     
-    currency_menu1.hide(); 
-    menu1_button.show(); 
+  void hide_menu1() {
+    currency_menu1.hide();
+    menu1_button.show();
   }
 
   void hide_menu2() {
@@ -51,42 +61,52 @@ private:
 
   void US_Dollar_pressed1() {
     hide_menu1();        // once a color is chosen from the menu, hide the menu
+    currency_1 = 0;
   }
 
   void US_Dollar_pressed2() {
     hide_menu2();
+    currency_2 = 0;
   }
 
   void EU_Euro_pressed1() {
     hide_menu1();
+    currency_1 = 1;
   }
 
   void EU_Euro_pressed2() {
     hide_menu2();
+    currency_2 = 1;
   }
 
   void GB_Pound_pressed1() {
     hide_menu1();
+    currency_1 = 2;
   }
 
   void GB_Pound_pressed2() {
     hide_menu2();
+    currency_2 = 2;
   }
 
   void IN_Rupee_pressed1() {
     hide_menu1();
+    currency_1 = 3;
   }
 
   void IN_Rupee_pressed2() {
     hide_menu2();
+    currency_2 = 3;
   }
 
   void AU_Dollar_pressed1() {
     hide_menu1();
+    currency_1 = 4;
   }
 
   void AU_Dollar_pressed2() {
     hide_menu2();
+    currency_2 = 4;
   }
 
   void menu_pressed1() {
@@ -223,7 +243,9 @@ void Lines_window::cb_calculate(Address, Address pw) {
 }
 
 void Lines_window::calculate(){
-    int money_converted = money_in.get_int();
+    double money_to_convert = money_in.get_int();
+    double rate = currency_table[currency_1][currency_2];
+    double money_converted = money_to_convert * rate;
     stringstream ss;
     ss << ' ' << money_converted << ' ';
     money_out.put(ss.str());
@@ -281,11 +303,30 @@ void Lines_window::cb_menu2(Address, Address pw)
   reference_to<Lines_window>(pw).menu_pressed2();
 }
 
+void import_file(string input, vector< vector<double>>& table){
+    vector<double> currency_row;
+    double rate;
+    ifstream ist (input);
+    if (!ist) error("Can't open input file: ", input);
+    for(int i = 0; i < 5; i++){
+        for(int j = 0; j < 5; j++){
+           ist >> rate;
+           currency_table[i][j] = rate;
+        }
+    }
+}
+
 // ---------------------------------------------------
 // main - just creates window and invokes gui_main
 
-int main() 
+int main()
   try {
+    string inputfile;
+    cout << "What is the datafile?" << endl;
+    cout << "Datafile: ";
+    cin >> inputfile;
+    import_file(inputfile, currency_table);
+
     // construct the GUI window
     Lines_window win(Point(100,100),600,400,"Currency Converter");
     return gui_main();  // inherited from Window; calls FLTK's run
