@@ -33,6 +33,7 @@ private:
   Menu currency_menu2;               // menu of currencies to convert to
   Button menu1_button;               // button to display menu 1
   Button menu2_button;               // button to display menu 2
+  Button calc_button;                // button to convert the currency
 
   // function members
 
@@ -102,6 +103,8 @@ private:
 
   void quit();   // defined below
 
+  void calculate(); // defined below
+
   // callback functions; declared here and defined below.
 
   static void cb_US_Dollar1(Address, Address);
@@ -116,6 +119,7 @@ private:
   static void cb_AU_Dollar2(Address, Address);
   static void cb_menu1(Address, Address);
   static void cb_menu2(Address, Address);
+  static void cb_calculate(Address, Address);
   static void cb_quit(Address, Address);
 };
 
@@ -138,36 +142,41 @@ Lines_window::Lines_window(Point xy, int w, int h, const string& title) :
 	      cb_quit),               // callback function for button
   // initialize the currency menu
   currency_menu1(
-         Point(x_max()-310, 20),
+         Point(100, 20),
          80, 20,
          Menu::vertical,
          "Currency to convert from"),
   currency_menu2(                        
-	     Point(x_max()-80,30),   // location of menu
+	     Point(x_max()-310,20),   // location of menu
 	     80, 20,                 // dimensions of menu
 	     Menu::vertical,         // list menu items vertically
 	     "Currency to convert to"),               // label of menu 
   menu1_button(
-          Point(x_max()-310, 20),
+          Point(100, 20),
           80, 20,
           "Currency to convert from",
           cb_menu1),
   // initialize the menu button
   menu2_button(
-	      Point(x_max()-80,30),  // location of menu button
+	      Point(x_max()-310,20),  // location of menu button
 	      80, 20,                // dimensions of button 
 	      "Currency to convert to", // label of button
 	      cb_menu2),               // callback for button
-   // initialize the currency inbox
-   money_in(
+  calc_button(
+          Point(x_max()-210, 0),
+          50, 20,
+          "Calculate",
+          cb_calculate),
+  // initialize the currency inbox
+  money_out(
           Point(x_max()-310,0),
           100,20,
-          "Amount"),
+          "Amount Converted"),
   //  initialize the currency output
-  money_out(
+  money_in(
           Point(100,0),
           100, 20,
-          "Amount Converted")
+          "Amount")
 
   // body of constructor follows
 {
@@ -175,6 +184,7 @@ Lines_window::Lines_window(Point xy, int w, int h, const string& title) :
   attach(quit_button);
   attach(money_in);
   attach(money_out);
+  money_out.put("0");
 
   currency_menu1.attach(new Button(Point(0,0),0,0,"US_Dollar",cb_US_Dollar1)); 
   currency_menu1.attach(new Button(Point(0,0),0,0,"EU_Euro",cb_EU_Euro1));
@@ -185,7 +195,6 @@ Lines_window::Lines_window(Point xy, int w, int h, const string& title) :
   currency_menu1.hide(); 
 
 
-  // attach currency to window
   currency_menu2.attach(new Button(Point(0,0),0,0,"US_Dollar",cb_US_Dollar2)); 
   currency_menu2.attach(new Button(Point(0,0),0,0,"EU_Euro",cb_EU_Euro2));
   currency_menu2.attach(new Button(Point(0,0),0,0,"GB_Pound",cb_GB_Pound2));
@@ -197,91 +206,79 @@ Lines_window::Lines_window(Point xy, int w, int h, const string& title) :
   // attach menu button
   attach(menu1_button);
   attach(menu2_button);
+  attach(calc_button);
 
 }
-
-// ---------------------------- 
-// callback function for quit button - boilerplate: 
-// When the button is pressed, the system invokes the
-// specified callback function.  First argument is address of the
-// button (which we won't use, so we don't bother to name it).  Second
-// argument, named pw, is address of the window containing the pressed
-// button, i.e., address of our Lines_window object.  reference_to
-// converts the address pw into a reference to a Lines_window object,
-// so we can call the quit() function.  Objective is to call function
-// quit() which does the real work specific to this button.
 
 void Lines_window::cb_quit(Address, Address pw) {
   reference_to<Lines_window>(pw).quit();   // quit is defined next
 }
 
-//------------------------------------
-// what to do when quit button is pressed
-
 void Lines_window::quit() {
   hide();                   // FLTK idiom for delete window
 }
 
+void Lines_window::cb_calculate(Address, Address pw) {
+  reference_to<Lines_window>(pw).calculate();
+}
+
+void Lines_window::calculate(){
+    int money_converted = money_in.get_int();
+    stringstream ss;
+    ss << ' ' << money_converted << ' ';
+    money_out.put(ss.str());
+
+    redraw();
+}
+
 void Lines_window::cb_US_Dollar1(Address, Address pw) {
   reference_to<Lines_window>(pw).US_Dollar_pressed1();  
-  // US_Dollar_pressed defined in Lines_window class as part of declaration
 }
 
 void Lines_window::cb_US_Dollar2(Address, Address pw) {
   reference_to<Lines_window>(pw).US_Dollar_pressed2();  
-  // US_Dollar_pressed defined in Lines_window class as part of declaration
 }
 
 void Lines_window::cb_EU_Euro1(Address, Address pw) {
   reference_to<Lines_window>(pw).EU_Euro_pressed1();  
-  // EU_Euro_pressed defined in Lines_window class as part of declaration
 }
 
 void Lines_window::cb_EU_Euro2(Address, Address pw) {
   reference_to<Lines_window>(pw).EU_Euro_pressed2();  
-  // EU_Euro_pressed defined in Lines_window class as part of declaration
 }
 
 void Lines_window::cb_GB_Pound1(Address, Address pw) {
   reference_to<Lines_window>(pw).GB_Pound_pressed1();  
-  // GB_Pound_pressed defined in Lines_window class as part of declaration
 }
 
 void Lines_window::cb_GB_Pound2(Address, Address pw) {
   reference_to<Lines_window>(pw).GB_Pound_pressed2();  
-  // GB_Pound_pressed defined in Lines_window class as part of declaration
 }
 
 void Lines_window::cb_IN_Rupee1(Address, Address pw) {
   reference_to<Lines_window>(pw).IN_Rupee_pressed1();  
-  // IN_Rupee_pressed defined in Lines_window class as part of declaration
 }
 
 void Lines_window::cb_IN_Rupee2(Address, Address pw) {
   reference_to<Lines_window>(pw).IN_Rupee_pressed2();  
-  // IN_Rupee_pressed defined in Lines_window class as part of declaration
 }
 
 void Lines_window::cb_AU_Dollar1(Address, Address pw) {
   reference_to<Lines_window>(pw).AU_Dollar_pressed1();  
-  // AU_Dollar_pressed defined in Lines_window class as part of declaration
 }
 
 void Lines_window::cb_AU_Dollar2(Address, Address pw) {
   reference_to<Lines_window>(pw).AU_Dollar_pressed2();  
-  // AU_Dollar_pressed defined in Lines_window class as part of declaration
 }
 
 void Lines_window::cb_menu1(Address, Address pw)
 {  
-    reference_to<Lines_window>(pw).menu_pressed1();
-    // menu_pressed defined in Lines_window class as part of declaration
+  reference_to<Lines_window>(pw).menu_pressed1();
 } 
 
 void Lines_window::cb_menu2(Address, Address pw)
 {  
-    reference_to<Lines_window>(pw).menu_pressed2();
-    // menu_pressed defined in Lines_window class as part of declaration
+  reference_to<Lines_window>(pw).menu_pressed2();
 }
 
 // ---------------------------------------------------
