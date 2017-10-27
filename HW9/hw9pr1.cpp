@@ -1,33 +1,51 @@
+double pi = 3.14159;
 class Shape{
     private:
-    double x,y;
+    int x,y;
     double distance;
     int num_vertex;
     double area;
     double perimeter;
 
     public:
-    double calc_perimeter(){};
-    double calc_area(){};
+    virtual double calc_perimeter(){};
+    virtual double calc_area(){};
 
 };
 class Equilateral_Triangle : public Shape{};
-class Square : public Shape{};
+class Square : public Shape{
+    public:
+    Square(int x, int y);
+};
 class Circle : public Shape{
     private:
     double radius;
-    virtual double calc_area(){
-        area = 2 * 3.14159 * (radius)^2;
+    double calc_area(){
+        area = 2 * pi * (radius)^2;
     };
+    double calc_perimeter(){
+        perimeter = 2 * pi * radius;
+    }
+    public:
+    Circle(int x, int y, int radius);
 };
-class Right_Triangle : public Shape{};
+class Right_Triangle : public Shape{
+    int x1,x2,x3,y1,y2,y3;
+    public:
+    Right_Triangle(int x1, int y1, int x2, int, y2, int x3, int y3);
+};
 class Rectangle : public Shape{
     private:
-    double width;
-    double height;
-    virtual double calc_area(){
+    int width;
+    int height;
+    double calc_area(){
         area = width * height;
     };
+    double calc_perimeter(){
+        perimeter = (2 * width) + (2 * height);
+    };
+    public:
+    Rectangle(int x, int y, int width, int height);
 };
 class Regular_Pentagon : public Shape{};
 
@@ -72,7 +90,7 @@ int main(){
         cout << "What is the file name?" << endl;
         cout << "File name: ";
         cin >> input;
-        import_file(inputfille);
+        import_file(inputfille, Shapes);
     }
     catch(exception& e){
         cerr << "exception: " << e.what() << '\n';
