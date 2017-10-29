@@ -20,7 +20,7 @@ vector<vector<double>> currency_table = {
         {0,0,0,0,0},
         {0,0,0,0,0},
         {0,0,0,0,0}
-};
+}; // table of currency rates when imported from file
 
 //----------------------------------------------------------
 // define a struct that is a window in which lines can be
@@ -244,9 +244,9 @@ void Lines_window::cb_calculate(Address, Address pw) {
 
 void Lines_window::calculate(){
     double money_to_convert = money_in.get_int();
+    stringstream ss;
     double rate = currency_table[currency_1][currency_2];
     double money_converted = money_to_convert * rate;
-    stringstream ss;
     ss << ' ' << money_converted << ' ';
     money_out.put(ss.str());
 
