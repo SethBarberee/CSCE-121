@@ -2,35 +2,57 @@
 double pi = 3.14159;
 class Shape{
     private:
-    int x,y;
+    int x,y,num_sides;
     double distance;
+    char type;
 
     protected:
     double area, perimeter, side_length;
-    int num_sides;
 
     public:
+    void set_num_sides(int sides){num_sides = sides;};
+    int get_num_sides(){return num_sides;};
+    void set_type(char shape_type){type = shape_type;};
+    char get_type(){return type;};
     virtual void calc_perimeter(){
         perimeter = side_length * num_sides;
     };
+    double get_perimeter(){return perimeter;};
     virtual void calc_area(){};
+    double get_area(){return area;};
     Shape(int x, int y, double distance);
     Shape(int x, int y);
 };
 Shape :: Shape(int x1, int y1, double vertex_distance) : x(x1), y(y1), distance(vertex_distance){}
 Shape :: Shape(int x1, int y1) : x(x1), y(y1){}
+ostream& operator <<(ostream& out, Shape& a){
+    out << "Type: " << a.get_type() << endl << "Num_Sides: " << a.get_num_sides() << endl << "Area: " << a.get_area() << endl << "Perimeter: " << a.get_perimeter() << endl;
+    return out;
+}
 
 class Equilateral_Triangle : public Shape{
     public:
     Equilateral_Triangle(int x, int y, double distance);
 };
-Equilateral_Triangle :: Equilateral_Triangle(int x1, int y1, double vertex_distance) : Shape(x1, y1, vertex_distance){}
+Equilateral_Triangle :: Equilateral_Triangle(int x1, int y1, double vertex_distance) : Shape(x1, y1, vertex_distance){
+    set_type('E');
+    set_num_sides(3);
+    side_length = 0; // Placeholder for calculation
+    calc_area();
+    calc_perimeter();
+}
 
 class Square : public Shape{
     public:
     Square(int x, int y, double distance);
 };
-Square :: Square(int x1, int y1, double vertex_distance) : Shape(x1, y1, vertex_distance){}
+Square :: Square(int x1, int y1, double vertex_distance) : Shape(x1, y1, vertex_distance){
+    set_type('S');
+    set_num_sides(4);
+    side_length = 0; // Placeholder for calculation
+    calc_area();
+    calc_perimeter();
+}
 
 class Circle : public Shape{
     private:
@@ -45,6 +67,9 @@ class Circle : public Shape{
     Circle(int x, int y, int radius);
 };
 Circle :: Circle(int x1, int y1, int rad) : Shape(x1, y1), radius(rad){
+    set_type('C');
+    set_num_sides(1);
+    side_length = 0; // Placeholder for calculation
     calc_area();
     calc_perimeter();
 }
@@ -54,7 +79,13 @@ class Right_Triangle : public Shape{
     public:
     Right_Triangle(int x1, int y1, int x2, int y2, int x3, int y3);
 };
-Right_Triangle :: Right_Triangle(int x1, int y1, int x_2, int y_2, int x_3, int y_3) : Shape(x1,y1), x2(x_2), y2(y_2), x3(x_3), y3(y_3){}
+Right_Triangle :: Right_Triangle(int x1, int y1, int x_2, int y_2, int x_3, int y_3) : Shape(x1,y1), x2(x_2), y2(y_2), x3(x_3), y3(y_3){
+    set_type('T');
+    set_num_sides(3);
+    side_length = 0; // Placeholder for calculation
+    calc_area();
+    calc_perimeter();
+}
 
 class Rectangle : public Shape{
     private:
@@ -70,6 +101,9 @@ class Rectangle : public Shape{
     Rectangle(int x, int y, int width, int height);
 };
 Rectangle :: Rectangle(int x1, int y1, int width_r, int height_r) : Shape(x1, y1), width(width_r), height(height_r){
+    set_type('R');
+    set_num_sides(4);
+    side_length = 0; // Placeholder for calculation
     calc_area();
     calc_perimeter();
 }
@@ -79,8 +113,11 @@ class Regular_Pentagon : public Shape{
     Regular_Pentagon(int x, int y, double distance);
 };
 Regular_Pentagon :: Regular_Pentagon(int x1, int y1, double vertex_distance) : Shape(x1, y1, vertex_distance){
-    num_sides = 5;
+    set_type('P');
+    set_num_sides(5);
     side_length = 0; // Placeholder for calculation
+    calc_area();
+    calc_perimeter();
 }
 
 class Regular_Hexagon : public Shape{
@@ -88,64 +125,90 @@ class Regular_Hexagon : public Shape{
     Regular_Hexagon(int x, int y, double distance);
 };
 Regular_Hexagon :: Regular_Hexagon(int x1, int y1, double vertex_distance) : Shape(x1, y1, vertex_distance){
-    num_sides = 6;
-    side_length = vertex_distance / 2;
+    set_type('H');
+    set_num_sides(6);
+    side_length = vertex_distance / 2; // side length is half of the vertex distance
+    calc_area();
+    calc_perimeter();
 }
 
 void import_file(string input, vector<Shape>& a){
     ifstream ist{input};
     if(!ist) error("Can't open input file: ", input);
-
-    char shape_type;
+    bool keep_reading = true;
+    char shape_type = ' ';
     int x, y, x2, y2, x3, y3, width, height, rad;
     double vertex_distance;
-    while(true){
+    // Pointers for each object type that will be created
+    Right_Triangle* Shape_T = nullptr;
+    Rectangle* Shape_R = nullptr;
+    Equilateral_Triangle* Shape_E = nullptr;
+    Square* Shape_S = nullptr;
+    Regular_Pentagon* Shape_P = nullptr;
+    Regular_Hexagon* Shape_H = nullptr;
+    Circle* Shape_C = nullptr;
+    while(keep_reading){
         ist >> shape_type;
         switch(shape_type){
             case 'T':
                 // import is a right triangle
                 ist >> x >> y >> x2 >> y2 >> x3 >> y3;
-                Shape_s = new Right_Triangle(x, y, x2, y2, x3, y3);
-                a.push_back(Shape_s);
+                Shape_T = new Right_Triangle(x, y, x2, y2, x3, y3);
+                a.push_back(*Shape_T); // push the right triangle object to the vector
+                delete[] Shape_T;
+                shape_type = ' ';
                 break;
             case 'R':
                 // import is a rectangle
                 ist >> x >> y >> width >> height;
-                Shape_s = new Rectangle(x, y, width, height);
-                a.push_back(Shape_s);
+                Shape_R = new Rectangle(x, y, width, height);
+                a.push_back(*Shape_R); // push the rectangle object to the vector
+                delete[] Shape_R;
+                shape_type = ' ';
                 break;
             case 'E':
                 // import is a equilateral triangle
                 ist >> x >> y >> vertex_distance;
-                Shape_s = new Equilateral_Triangle(x, y, vertex_distance);
-                a.push_back(Shape_s);
+                Shape_E = new Equilateral_Triangle(x, y, vertex_distance);
+                a.push_back(*Shape_E); // push the equilateral triangle object to the vector
+                delete[] Shape_E;
+                shape_type = ' ';
                 break;
             case 'S':
                 // import is a square
                 ist >> x >> y >> vertex_distance;
-                Shape_s = new Square(x, y, vertex_distance);
-                a.push_back(Shape_s);
+                Shape_S = new Square(x, y, vertex_distance);
+                a.push_back(*Shape_S); // push the square object to the vector
+                delete[] Shape_S;
+                shape_type = ' ';
                 break;
             case 'P':
                 // import is a pentagon
                 ist >> x >> y >> vertex_distance;
-                Shape_s = new Regular_Pentagon(x, y, vertex_distance);
-                a.push_back(Shape_s);
+                Shape_P = new Regular_Pentagon(x, y, vertex_distance);
+                a.push_back(*Shape_P); // push the pentagon object to the vector
+                delete[] Shape_P;
+                shape_type = ' ';
                 break;
             case 'H':
                 // import is a hexagon
                 ist >> x >> y >> vertex_distance;
-                Shape_s = new Regular_Hexagon(x, y, vertex_distance);
-                a.push_back(Shape_s);
+                Shape_H = new Regular_Hexagon(x, y, vertex_distance);
+                a.push_back(*Shape_H); // push the hexagon object to the vector
+                delete[] Shape_H;
+                shape_type = ' ';
                 break;
             case 'C':
                 // import is a circle
                 ist >> x >> y >> rad;
-                Shape_S = new Circle(x, y, rad);
-                a.push_back(Shape_s);
+                Shape_C = new Circle(x, y, rad);
+                a.push_back(*Shape_C); // push the circle object to the vector
+                delete[] Shape_C;
+                shape_type = ' ';
                 break;
             default:
-                break;
+                // Doesn't meet criteria for shape so quit
+                keep_reading = false;
             }
     }
 }
@@ -158,6 +221,10 @@ int main(){
         cout << "File name: ";
         cin >> inputfile;
         import_file(inputfile, Shapes);
+
+        for(int i = 0; i < Shapes.size(); i++){
+            cout << Shapes[i] << endl; // output each shape info to the screen
+        }
     }
     catch(exception& e){
         cerr << "exception: " << e.what() << '\n';
