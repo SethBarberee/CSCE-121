@@ -1,24 +1,26 @@
 #include "std_lib_facilities_4.h"
 double pi = 3.14159;
+
 class Shape{
     private:
-    int x,y,num_sides;
+    int num_sides;
     double distance;
     char type;
 
     protected:
+    int x, y;
     double area, perimeter, side_length;
+    virtual void calc_perimeter(){
+        perimeter = side_length * num_sides;
+    };
+    virtual void calc_area(){};
 
     public:
     void set_num_sides(int sides){num_sides = sides;};
     int get_num_sides(){return num_sides;};
     void set_type(char shape_type){type = shape_type;};
     char get_type(){return type;};
-    virtual void calc_perimeter(){
-        perimeter = side_length * num_sides;
-    };
     double get_perimeter(){return perimeter;};
-    virtual void calc_area(){};
     double get_area(){return area;};
     Shape(int x, int y, double distance);
     Shape(int x, int y);
@@ -33,23 +35,31 @@ ostream& operator <<(ostream& out, Shape& a){
 class Equilateral_Triangle : public Shape{
     public:
     Equilateral_Triangle(int x, int y, double distance);
+    protected:
+    void calc_area(){
+        area = (side_length * side_length) * (sqrt(3)/4);
+    }
 };
 Equilateral_Triangle :: Equilateral_Triangle(int x1, int y1, double vertex_distance) : Shape(x1, y1, vertex_distance){
     set_type('E');
     set_num_sides(3);
-    side_length = 0; // Placeholder for calculation
+    side_length = (vertex_distance * 2) / sqrt(3);
     calc_area();
     calc_perimeter();
 }
 
 class Square : public Shape{
+    protected:
+    void calc_area(){
+        area = side_length * side_length;
+    }
     public:
     Square(int x, int y, double distance);
 };
 Square :: Square(int x1, int y1, double vertex_distance) : Shape(x1, y1, vertex_distance){
     set_type('S');
     set_num_sides(4);
-    side_length = 0; // Placeholder for calculation
+    side_length = (vertex_distance * 2) / sqrt(2);
     calc_area();
     calc_perimeter();
 }
@@ -57,11 +67,12 @@ Square :: Square(int x1, int y1, double vertex_distance) : Shape(x1, y1, vertex_
 class Circle : public Shape{
     private:
     double radius;
+    protected:
     void calc_area(){
         area = 2 * pi * radius * radius;
     };
     void calc_perimeter(){
-        perimeter = 2 * pi * radius;
+        perimeter = 2 * pi * radius; // Perimeter for a circle is circumference
     }
     public:
     Circle(int x, int y, int radius);
@@ -69,20 +80,31 @@ class Circle : public Shape{
 Circle :: Circle(int x1, int y1, int rad) : Shape(x1, y1), radius(rad){
     set_type('C');
     set_num_sides(1);
-    side_length = 0; // Placeholder for calculation
     calc_area();
     calc_perimeter();
 }
 
 class Right_Triangle : public Shape{
     int x2,x3,y2,y3;
+    double side_a;
+    double side_b;
+    double side_c;
+    protected:
+    void calc_area(){
+        area = (side_a * side_b)/2;
+    }
+    void calc_perimeter(){
+        perimeter = side_a + side_b + side_c;
+    }
     public:
-    Right_Triangle(int x1, int y1, int x2, int y2, int x3, int y3);
+    Right_Triangle(int x, int y, int x2, int y2, int x3, int y3);
 };
-Right_Triangle :: Right_Triangle(int x1, int y1, int x_2, int y_2, int x_3, int y_3) : Shape(x1,y1), x2(x_2), y2(y_2), x3(x_3), y3(y_3){
+Right_Triangle :: Right_Triangle(int x_1, int y_1, int x_2, int y_2, int x_3, int y_3) : Shape(x_1, y_1), x2(x_2), y2(y_2), x3(x_3), y3(y_3){
     set_type('T');
     set_num_sides(3);
-    side_length = 0; // Placeholder for calculation
+    side_a = sqrt(((x2-x) * (x2-x)) + ((y2 -y) * (y2-y)));
+    side_b = sqrt(((x3-x) * (x3-x)) + ((y3 -y) * (y3-y)));
+    side_c = sqrt((side_a * side_a) + (side_b * side_b));
     calc_area();
     calc_perimeter();
 }
@@ -91,6 +113,7 @@ class Rectangle : public Shape{
     private:
     int width;
     int height;
+    protected:
     void calc_area(){
         area = width * height;
     };
@@ -103,31 +126,38 @@ class Rectangle : public Shape{
 Rectangle :: Rectangle(int x1, int y1, int width_r, int height_r) : Shape(x1, y1), width(width_r), height(height_r){
     set_type('R');
     set_num_sides(4);
-    side_length = 0; // Placeholder for calculation
     calc_area();
     calc_perimeter();
 }
 
 class Regular_Pentagon : public Shape{
+    protected:
+    void calc_area(){
+        area = (side_length * side_length * sqrt(25 + (10 * sqrt(5))))/4;
+    }
     public:
     Regular_Pentagon(int x, int y, double distance);
 };
 Regular_Pentagon :: Regular_Pentagon(int x1, int y1, double vertex_distance) : Shape(x1, y1, vertex_distance){
     set_type('P');
     set_num_sides(5);
-    side_length = 0; // Placeholder for calculation
+    side_length = 2 * vertex_distance * sin((pi/5));
     calc_area();
     calc_perimeter();
 }
 
 class Regular_Hexagon : public Shape{
+    protected:
+    void calc_area(){
+        area = ((3 * sqrt(3))/2) * side_length * side_length;
+    }
     public:
     Regular_Hexagon(int x, int y, double distance);
 };
 Regular_Hexagon :: Regular_Hexagon(int x1, int y1, double vertex_distance) : Shape(x1, y1, vertex_distance){
     set_type('H');
     set_num_sides(6);
-    side_length = vertex_distance / 2; // side length is half of the vertex distance
+    side_length = vertex_distance;
     calc_area();
     calc_perimeter();
 }
