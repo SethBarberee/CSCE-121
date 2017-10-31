@@ -1,3 +1,7 @@
+// Author: Seth Barberee
+// Assignment: Homework 9 Problem 1
+// Purpose: Import a file with shapes given x and y coordinates and radius. Calculate area, perimeter, vertex points.
+
 #include "std_lib_facilities_4.h"
 double pi = 3.14159;
 
