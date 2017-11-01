@@ -60,10 +60,9 @@ class Shape{
 Shape :: Shape(int x1, int y1, double vertex_distance) : x(x1), y(y1), distance(vertex_distance){}
 Shape :: Shape(int x1, int y1) : x(x1), y(y1){}
 ostream& operator <<(ostream& out, Shape& a){
-         out << "Type: " << a.get_type() << endl << "Num_Sides: " << a.get_num_sides() << endl << "Area: " << a.get_area() << endl << "Perimeter: " << a.get_perimeter() << "Points:" << endl;
+         out << "Type: " << a.get_type() << endl << "Num_Sides: " << a.get_num_sides() << endl << "Area: " << a.get_area() << endl << "Perimeter: " << a.get_perimeter() << endl << "Points:" << endl;
         return out;
     }
-}
 
 class Equilateral_Triangle : public Shape{
     public:
@@ -133,6 +132,9 @@ class Right_Triangle : public Shape{
     double side_a;
     double side_b;
     double side_c;
+    double a2;
+    double b2;
+    double c2;
     protected:
     void calc_area(){
         area = (side_a * side_b)/2;
@@ -148,7 +150,16 @@ Right_Triangle :: Right_Triangle(int x_1, int y_1, int x_2, int y_2, int x_3, in
     set_num_sides(3);
     side_a = sqrt(((x2-x) * (x2-x)) + ((y2 -y) * (y2-y)));
     side_b = sqrt(((x3-x) * (x3-x)) + ((y3 -y) * (y3-y)));
-    side_c = sqrt((side_a * side_a) + (side_b * side_b));
+    side_c = sqrt((x2-x3 * (x2-x3)) + ((y2-y3) * (y2-y3)));
+    a2 = side_a * side_a;
+    b2 = side_b * side_b;
+    c2 = side_c * side_c;
+    if (a2+b2 == c2 || c2+b2 == a2 || c2+a2 == b2){
+        cout << "Definitely is a right triangle" << endl;
+    }
+    else{
+        cout << "Not a right triangle" << endl;
+    }
     Point_1 = Point(x_1, y_1);
     Point_2 = Point(x_2, y_2);
     Point_3 = Point(x_3, y_3);
