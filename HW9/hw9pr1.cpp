@@ -3,15 +3,16 @@
 // Purpose: Import a file with shapes given x and y coordinates and radius. Calculate area, perimeter, vertex points.
 
 #include "std_lib_facilities_4.h"
-double pi = 3.14159;
+const double pi = 3.14159; // tweak this for accuracy of polar coordinates
 
 struct Point{
-    int Point_x,Point_y;
-    Point(int Point_x, int Point_y);
-    int get_x(){return Point_x;}
-    int get_y(){return Point_y;}
+    double Point_x,Point_y;
+    Point(double Point_x, double Point_y);
+    double get_x(){return Point_x;}
+    double get_y(){return Point_y;}
 };
-Point :: Point(int x, int y) : Point_x(x), Point_y(y){}
+// Print out everything about Points in a pretty fashion
+Point :: Point(double x, double y) : Point_x(x), Point_y(y){}
 ostream& operator <<(ostream& out, Point& a){
     out << "(" << a.get_x() << ", " << a.get_y() << ")";
 }
@@ -45,15 +46,20 @@ class Shape{
     double get_perimeter(){return perimeter;}
     double get_area(){return area;};
     void add_point(Point a){
-        Points.push_back(a);
+        Points.push_back(a); // add the point to the vector
     }
     void print_points(){
         for (int i = 0; i < Points.size(); i++){
-            cout << Points[i] << endl;
+            cout << Points[i] << endl; // print out all the points
         }
     }
     vector<Point> get_points(){return Points;}
     Point get_point(int id){return Points[id];}
+    double deg2rad(double degrees){ // used for polar coordinates
+        double rad;
+        rad = (degrees/180) * pi;
+        return rad;
+    }
     Shape(int x, int y, double distance);
     Shape(int x, int y);
 };
@@ -76,6 +82,10 @@ Equilateral_Triangle :: Equilateral_Triangle(int x1, int y1, double vertex_dista
     set_type('E');
     set_num_sides(3);
     side_length = (vertex_distance * 2) / sqrt(3);
+    for(int i = 0; i < 360; i = i + (360/3)){
+        Point_1 = Point(x1 +( cos(deg2rad(i))*side_length),y1 + (sin(deg2rad(i))*side_length));
+        add_point(Point_1);
+    }
     calc_area();
     calc_perimeter();
 }
@@ -154,7 +164,7 @@ Right_Triangle :: Right_Triangle(int x_1, int y_1, int x_2, int y_2, int x_3, in
     a2 = side_a * side_a;
     b2 = side_b * side_b;
     c2 = side_c * side_c;
-    if (a2+b2 == c2 || c2+b2 == a2 || c2+a2 == b2){
+    if (a2+b2 == c2 || c2+b2 == a2 || c2+a2 == b2){ // if it passes Pythagorean's theorem then it's a right triangle
         cout << "Definitely is a right triangle" << endl;
     }
     else{
@@ -211,6 +221,10 @@ Regular_Pentagon :: Regular_Pentagon(int x1, int y1, double vertex_distance) : S
     set_type('P');
     set_num_sides(5);
     side_length = 2 * vertex_distance * sin((pi/5));
+    for(int i = 0; i < 360; i = i + (360/5)){
+        Point_1 = Point(x1 +( cos(deg2rad(i))*side_length),y1 + (sin(deg2rad(i))*side_length));
+        add_point(Point_1);
+    }
     calc_area();
     calc_perimeter();
 }
@@ -227,6 +241,10 @@ Regular_Hexagon :: Regular_Hexagon(int x1, int y1, double vertex_distance) : Sha
     set_type('H');
     set_num_sides(6);
     side_length = vertex_distance;
+    for(int i = 0; i < 360; i = i + (360/6)){
+        Point_1 = Point(x1 +( cos(deg2rad(i))*side_length),y1 + (sin(deg2rad(i))*side_length));
+        add_point(Point_1);
+    }
     calc_area();
     calc_perimeter();
 }
@@ -316,7 +334,7 @@ int main(){
 
         for(int i = 0; i < Shapes.size(); i++){
             cout << Shapes[i]; // output each shape info to the screen
-            Shapes[i].print_points();
+            Shapes[i].print_points(); // print out all the points
             cout << endl;
         }
     }
