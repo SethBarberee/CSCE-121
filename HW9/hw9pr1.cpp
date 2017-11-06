@@ -15,6 +15,7 @@ struct Point{
 Point :: Point(double x, double y) : Point_x(x), Point_y(y){}
 ostream& operator <<(ostream& out, Point& a){
     out << "(" << a.get_x() << ", " << a.get_y() << ")";
+    return out;
 }
 
 Point Point_1 = Point(0,0);
@@ -49,7 +50,7 @@ class Shape{
         Points.push_back(a); // add the point to the vector
     }
     void print_points(){
-        for (int i = 0; i < Points.size(); i++){
+        for (unsigned int i = 0; i < Points.size(); i++){
             cout << Points[i] << endl; // print out all the points
         }
     }
@@ -82,7 +83,7 @@ Equilateral_Triangle :: Equilateral_Triangle(int x1, int y1, double vertex_dista
     set_type('E');
     set_num_sides(3);
     side_length = (vertex_distance * 2) / sqrt(3);
-    for(int i = 0; i < 360; i = i + (360/3)){
+    for(unsigned int i = 0; i < 360; i = i + (360/3)){
         Point_1 = Point(x1 +( cos(deg2rad(i))*side_length),y1 + (sin(deg2rad(i))*side_length));
         add_point(Point_1);
     }
@@ -331,7 +332,7 @@ int main(){
         cin >> inputfile;
         import_file(inputfile, Shapes);
 
-        for(int i = 0; i < Shapes.size(); i++){
+        for(unsigned int i = 0; i < Shapes.size(); i++){
             cout << Shapes[i]; // output each shape info to the screen
             Shapes[i].print_points(); // print out all the points
             cout << endl;
