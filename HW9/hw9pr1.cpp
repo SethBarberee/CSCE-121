@@ -252,7 +252,6 @@ Regular_Hexagon :: Regular_Hexagon(int x1, int y1, double vertex_distance) : Sha
 void import_file(string input, vector<Shape>& a){
     ifstream ist{input};
     if(!ist) error("Can't open input file: ", input);
-    bool keep_reading = true;
     char shape_type = ' ';
     int x, y, x2, y2, x3, y3, width, height, rad;
     double vertex_distance;
@@ -264,7 +263,7 @@ void import_file(string input, vector<Shape>& a){
     Regular_Pentagon* Shape_P = nullptr;
     Regular_Hexagon* Shape_H = nullptr;
     Circle* Shape_C = nullptr;
-    while(keep_reading){
+    while(!ist.eof()){
         ist >> shape_type;
         switch(shape_type){
             case 'T':
@@ -318,7 +317,7 @@ void import_file(string input, vector<Shape>& a){
                 break;
             default:
                 // Doesn't meet criteria for shape so quit
-                keep_reading = false;
+                break;
             }
     }
 }
