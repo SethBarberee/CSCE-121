@@ -1,5 +1,5 @@
 class Customer {
-    private:
+    protected:
     string name;
     double balance;
     string photo;
@@ -23,9 +23,8 @@ class Location {
     Location(double latitude, double longitude);
 };
 class Driver : public Customer {
-    private:
-    Location driver_location;
     public:
+    Location driver_location;
     Driver(string name, double balance, string photo, Location driver_location);
 };
 class Place {
@@ -33,9 +32,9 @@ class Place {
     string name;
     string photo;
     vector<string> tags;
-    Location place_location;
 
     public:
+    Location place_location;
     string get_name() const {return name;}
     string get_photo() const {return photo;}
     string get_tag(int id) {return tags[id];}
