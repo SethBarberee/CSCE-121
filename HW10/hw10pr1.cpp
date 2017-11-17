@@ -18,17 +18,23 @@ ostream& operator<<(ostream& os, const Node& a){
 class List {
     private:
     int size;
-    Node* current_node;
     Node* first;
     Node* last;
     
     public:
-    List(){size = 0; current_node = nullptr; first = nullptr; last = nullptr;};
+    List(){size = 0; first = nullptr; last = nullptr;};
     // TODO Copy Constructor
+    List(List *a){
+        a->first = this->first;
+        a->last = this->last;
+        a->size = this->size;
+    }
     // TODO Copy Assignment
+    List& operator=(List *a){}
     // TODO Destructor
-    int get_size() const {return size;}
-    Node* get_current_node(){ return current_node;}
+    ~List(){}
+    int get_size() {return size;}
+    Node* get_first(){return first; }
     Node* get_last(){ return last;}
     Node* insert(Node* a){
         if(size > 0){ // check if it's not empty
@@ -36,7 +42,6 @@ class List {
             a->prev = get_last();
             this->get_last()->next = a;
             last = a;
-            current_node = a;
             size++; // Increase size on successful insert
             return a;
         }
@@ -47,19 +52,19 @@ class List {
             first = a;
             last = a;
             size++; // Increase size on successful insert
-            current_node = a;
             return a;
         }
     }
-    Node* insert_pos(Node*a, int n){
+    Node* insert_pos(Node* a, int n){
         if(n <= size){
+            Node* current = this->get_first();
             for(int i = 1; i < n; i++){
-                this->current_node = this->current_node->next;
+                current = current->next;
             }
-            this->current_node->next->prev = a;
-            this->current_node->next = a;
+            current->prev->next = a;
+            a->next = current;
+            a->prev = current->prev;
             size++; // Increase size on successful insert
-            current_node = a;
             return a;
         }
         else{
@@ -68,24 +73,42 @@ class List {
     }
     Node* remove_pos(int n){
         if(n <= size){
+            Node* current = this->get_first();
             for(int i = 1; i < n; i++){
-                this->current_node = this->current_node->next; 
+                current = current->next;
             }
-            this->current_node->prev->next = this->current_node->next;
-            this->current_node->next->prev = this->current_node->prev;
+            current->prev->next = current->next;
+            current->next->prev = current->prev;
             size--; // Decrease size on successful removal
-            return this->current_node;
+            return current;
         }
         else{
             return nullptr;
         }
     }
 };
-ostream& operator<<(ostream& os, const List& a){
-    // TODO loop through Nodes and cout them
-    // os << Node
-    return os << a.get_size();
+ostream& operator<<(ostream& os, List* a){
+    Node* current = a->get_first();
+    for(int i = 1; i <= a->get_size(); i++){
+        os << "Position " << i << ": " << *current << endl;
+        current = current->next;
+    }
+    return os;
 }
 int main(){
     List* demo = new List();
+    cout << "Blank list created" << endl;
+    demo->insert(new Node(10));
+    demo->insert(new Node(12));
+    cout << "Added two nodes" << endl;
+    cout << "Insertion of 2 at position 2" << endl;
+    demo->insert_pos(new Node(2),2);
+    cout << demo << endl;
+    cout << "Removal of 2 at position 2" << endl;
+    demo->remove_pos(2);
+    cout << demo << endl;
+    List* demo2 = demo;
+    cout << "Copy constructor of demo to demo2" << endl;
+    cout << demo2 << endl;
+    cout << "Copy assignment of demo to demo3" << endl;
 }
