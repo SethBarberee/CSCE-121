@@ -23,16 +23,30 @@ class List {
     
     public:
     List(){size = 0; first = nullptr; last = nullptr;};
-    // TODO Copy Constructor
+    // Copy Constructor
     List(List *a){
         a->first = this->first;
         a->last = this->last;
         a->size = this->size;
     }
-    // TODO Copy Assignment
-    List& operator=(List *a){}
+    // Copy Assignment
+    List& operator=(List *a){
+        this->first = a->first;
+        this->last = a->last;
+        this->size = a->size;
+    }
     // TODO Destructor
-    ~List(){}
+    ~List(){
+        // TODO loop though nodes and delete pointers
+        Node* current = this->get_first();
+        for(int i = 0; i < this->get_size(); i++){
+            current = current->next;
+            delete[] current->prev->next;
+            delete[] current->prev;
+        }
+        delete[] first;
+        delete[] last;
+    }
     int get_size() {return size;}
     Node* get_first(){return first; }
     Node* get_last(){ return last;}
@@ -110,5 +124,11 @@ int main(){
     List* demo2 = demo;
     cout << "Copy constructor of demo to demo2" << endl;
     cout << demo2 << endl;
+    List* demo3 = new List();
+    demo3->insert(new Node(10));
+    cout << "demo3 created with one element" << endl;
+    cout << demo3 << endl;
     cout << "Copy assignment of demo to demo3" << endl;
+    demo3 = demo;
+    cout << demo3 << endl;
 }
