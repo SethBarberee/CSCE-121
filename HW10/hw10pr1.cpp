@@ -35,21 +35,34 @@ class List {
         this->last = a->last;
         this->size = a->size;
     }
-    // TODO Destructor
+    // Destructor
     ~List(){
-        // TODO loop though nodes and delete pointers
+        cout << "Deleting list..." << endl;
         Node* current = this->get_first();
         for(int i = 0; i < this->get_size(); i++){
-            current = current->next;
-            delete[] current->prev->next;
+            cout << "Deleting node..." << endl;
             delete[] current->prev;
+            cout << "Deleted node previous pointer..." << endl;
+            current = current->next;
+            if (current->next == nullptr){
+                cout << "Deleted all nodes..." << endl;  
+                break;
+            }
+            delete[] current->prev->next;
+            cout << "Deleted node next pointer" << endl;
+            cout << "Finished deleting node.." << endl;
         }
+        delete[] current;
+        cout << "Deleting first pointer..." << endl;
         delete[] first;
+        cout << "Deleting last pointer..." << endl;
         delete[] last;
+        cout << "Done!" << endl;
     }
     int get_size() {return size;}
     Node* get_first(){return first; }
     Node* get_last(){ return last;}
+    // Insert at end of List
     Node* insert(Node* a){
         if(size > 0){ // check if it's not empty
             a->next = nullptr;
@@ -69,6 +82,7 @@ class List {
             return a;
         }
     }
+    // Insert before given position
     Node* insert_pos(Node* a, int n){
         if(n <= size){
             Node* current = this->get_first();
@@ -85,6 +99,7 @@ class List {
             return nullptr;
         }
     }
+    // Remove node at given position
     Node* remove_pos(int n){
         if(n <= size){
             Node* current = this->get_first();
@@ -131,4 +146,6 @@ int main(){
     cout << "Copy assignment of demo to demo3" << endl;
     demo3 = demo;
     cout << demo3 << endl;
+    cout << "Explicit call of destructor on demo3";
+    demo3->~List(); // explicit call to destructor
 }
