@@ -9,6 +9,16 @@ struct Record {
     Record(int units_sold, double unit_price);
 };
 
+// TODO work on this!!
+template<class T> struct total_func{
+    T total;
+    Record a;
+    total_func(T& v, const Record& r) : total(v), a(r) {}
+    bool operator()(double v, const Record& r) const {
+        return v + r.unit_price * r.units_sold;
+    }
+};
+
 Record :: Record(int unit, double price) : units_sold(unit), unit_price(price){}
 
 double total(double v, const Record& r){
@@ -36,7 +46,7 @@ int main(){
     // Function object as an argument to accumulate
     // I.E. multiplies<double>()
     cout << "Accumulate using a function object..." << endl;
-    //accumulate(Records.begin(), Records.end(), );
+    //accumulate(Records.begin(), Records.end(), total_func());
     // Lamda function as an argument to accumulate
     cout << "Accumulate using a lamda function..." << endl;
     cout << accumulate(Records.begin(), Records.end(),0.0,[](double v, const Record& r){return v + r.unit_price*r.units_sold;}) << endl;
