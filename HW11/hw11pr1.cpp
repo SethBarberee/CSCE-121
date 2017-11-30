@@ -35,10 +35,16 @@ int main(){
     // copy functions
     int array_me[] = {0,0,0,0,0,0,0,0,0,0};
     copy(array_test, array_test+sizeof(array_test)/sizeof(*array_test), array_me);
+    cout << "1st array copied into 2nd array" << endl;
+    print(array_me,array_me+sizeof(array_me)/sizeof(*array_me));
     vector<int> vector_me(10);
     copy(vector_test.begin(), vector_test.end(), vector_me.begin());
+    cout << "1st vector copied into second vector" << endl;
+    print(vector_me.begin(), vector_me.end());
     list<int> list_me(10);
     copy(list_test.begin(), list_test.end(), list_me.begin());
+    cout << "1st list copied into 2nd list" << endl;
+    print(list_me.begin(), list_me.end());
 
     // add_each functions
     cout << "2 added to each element in 1st array" << endl;
@@ -60,12 +66,17 @@ int main(){
     print(array_me, array_me+sizeof(array_me)/sizeof(*array_me));
 
     // Find functions
-    cout << "In first vector, 3 is located at:" << endl;
-    cout << *find(vector_test.begin(), vector_test.end(), 3) << endl;
-    print(vector_test.begin(), vector_test.end());
-    cout << "In first list, 27 is located at:" << endl;
-    cout << *find(list_test.begin(), list_test.end(), 27) << endl;
-    print(list_test.begin(), list_test.end());
-
+    cout << "In first vector, 3 is ";
+    vector<int>::iterator p = find(vector_test.begin(), vector_test.end(), 3);
+    if(p == vector_test.end())
+        cout << "not found!" << endl;
+    else
+        cout << "found!!" << endl;
+    cout << "In first list, 27 is ";
+    list<int>::iterator a = find(list_test.begin(), list_test.end(), 27);
+    if(a == list_test.end())
+        cout << "not found!" << endl;
+    else
+        cout << "found!" << endl;
     return 0;
 }
