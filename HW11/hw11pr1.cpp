@@ -1,4 +1,7 @@
 #include "std_lib_facilities_4.h"
+// Author: Seth Barberee
+// Assignment: Homework 11 Problem 1
+// Purpose: Operate on vectors, array, and lists with custom template functions
 
 template<class Iter1, class Iter2>
 Iter2 my_copy(Iter1 f1, Iter1 e1, Iter2 f2){

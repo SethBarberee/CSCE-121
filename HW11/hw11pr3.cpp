@@ -1,4 +1,7 @@
 #include "std_lib_facilities_4.h"
+// Author: Seth Barberee
+// Assignment: Homework 11 Problem 3
+// Purpose: Create a map container and repeatedly do operations on it
 
 int main(){
     map<string,int> my_map;
@@ -37,6 +40,7 @@ int main(){
         case 4: {   cout << "Checking if a name is in the map..." << endl;
                     cout << "Name: ";
                     cin >> s;
+                    // Couldn't I just use find??
                     for(const auto& p : my_map){
                         if(s == p.first){
                             cout << "Found!" << endl;
