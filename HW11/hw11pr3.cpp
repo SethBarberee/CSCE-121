@@ -35,17 +35,26 @@ int main(){
                 }
         case 3: {
                     cout << "Erasing a pair..." << endl;
+                    cout << "String: ";
+                    cin >> s;
+                    map<string, int> ::iterator iter = my_map.find(s);
+                    if (iter != my_map.end()){
+                        my_map.erase(iter);
+                    }
+                    else{
+                        cout << "Not found!" << endl;
+                    }
                     break;
                 }
         case 4: {   cout << "Checking if a name is in the map..." << endl;
                     cout << "Name: ";
                     cin >> s;
-                    // Couldn't I just use find??
-                    for(const auto& p : my_map){
-                        if(s == p.first){
-                            cout << "Found!" << endl;
-                            break;
-                        }
+                    map<string, int> ::iterator iter = my_map.find(s);
+                    if (iter != my_map.end()){
+                        cout << "Found!" << endl;
+                    }
+                    else{
+                        cout << "Not found!" << endl;
                     }
                     break;
                 }

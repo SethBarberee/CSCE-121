@@ -9,7 +9,13 @@ Iter2 my_copy(Iter1 f1, Iter1 e1, Iter2 f2){
         return f2;
     }
     else{
-        // TODO for loop to copy
+        // Somehow set f2 to end of container
+        /*while(f1 != e1){
+            ++f2;
+            *f2 = *f1;
+            ++f1;
+        }*/
+        return f2;
     }
 }
 
