@@ -6,17 +6,20 @@
 struct Record {
     int units_sold;
     double unit_price;
+    double get_sum(){
+        return unit_price * units_sold;
+    }
     Record(int units_sold, double unit_price);
 };
 
 Record :: Record(int unit, double price) : units_sold(unit), unit_price(price){}
 
 // TODO work on this!!
-struct total_func{
+template<class SUM, class Type> struct total_func{
     double initial = 0.0;
-    total_func(double& v) : initial(v){}
-    double operator()(Record& r) {
-        return initial + r.unit_price * r.units_sold;
+    total_func(){}
+    double operator()(const SUM& d, Type& t) {
+        return d + t.get_sum();
     }
 };
 
@@ -29,7 +32,6 @@ int main(){
     int units;
     double price;
 
-    // TODO add file import
     ifstream ist {"data.txt"};
 
     if(!ist) error("Can't open input file!");
@@ -45,7 +47,7 @@ int main(){
     // Function object as an argument to accumulate
     // I.E. multiplies<double>()
     cout << "Accumulate using a function object..." << endl;
-    cout << accumulate(Records.begin(), Records.end(), total_func(0.0)) << endl;
+    cout << accumulate(Records.begin(), Records.end(), 0.0, total_func<double, Record>()) << endl;
     // Lamda function as an argument to accumulate
     cout << "Accumulate using a lamda function..." << endl;
     cout << accumulate(Records.begin(), Records.end(),0.0,[](double v, const Record& r){return v + r.unit_price*r.units_sold;}) << endl;
