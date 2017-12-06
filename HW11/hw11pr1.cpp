@@ -76,13 +76,17 @@ int main(){
     vector<int>::iterator p = find(vector_test.begin(), vector_test.end(), 3);
     if(p == vector_test.end())
         cout << "not found!" << endl;
-    else
+    else{
         cout << "found!!" << endl;
+        cout << "Address: " << &p << endl;
+    }
     cout << "In first list, 27 is ";
     list<int>::iterator a = find(list_test.begin(), list_test.end(), 27);
     if(a == list_test.end())
         cout << "not found!" << endl;
-    else
+    else{
         cout << "found!" << endl;
+        cout << "Address: " << &a << endl;
+    }
     return 0;
 }

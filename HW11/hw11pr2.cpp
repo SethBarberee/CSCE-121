@@ -14,7 +14,6 @@ struct Record {
 
 Record :: Record(int unit, double price) : units_sold(unit), unit_price(price){}
 
-// TODO work on this!!
 template<class SUM, class Type> struct total_func{
     double initial = 0.0;
     total_func(){}
